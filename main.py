@@ -23,6 +23,15 @@ class Table:
     def list_table(self, config):
         start = config['start']
         end = config['end']
+        limit = config['limit']
+
+
+        if int(start) == -1:
+            start = len(self.rows) - 1
+        if int(end) == -1:
+            end = len(self.rows)
+        if int(limit) == -1:
+            limit = len(self.rows)
 
         if type(start) != int or type(end) != int :
             raise TypeError(f"type of start and end should be an integer but given start:{type(start)}, end:{type(end)}")
@@ -31,12 +40,13 @@ class Table:
         elif end < start :
             raise IndexError(f"end should be greater than or equals to start but given start:{type(start)}, end:{type(end)}")
 
-        if start == -1:
-            start = len(self.rows) - 1
-        if end == -1:
-            end = len(self.rows)
-            
-        rows = self.rows[start:end]
+
+        index = self.column_title.index(config['search']['column_name'])
+        value = (config['search']['term']).strip().lower()
+
+        rows = list(filter(lambda x: value in x[index].strip().lower(), self.rows[start:end]))
+        rows = rows[:limit]
+
         table = '+' 
 
         for title in self.column_title:
@@ -66,11 +76,12 @@ class Table:
         print(table)     
 
 config = {
-    "start":10,
-    "end":9,
+    "start":50,
+    "end":500,
+    "limit":10,
     "search": {
-        "column_name":'country',
-        "term":'USA'
+        "column_name":'location',
+        "term":'United States'
     }    
 }
 zb = Table("data.csv")

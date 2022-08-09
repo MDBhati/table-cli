@@ -1,4 +1,4 @@
-﻿Rank,institution,location code,location,ar score,ar rank,er score,er rank,fsr score,fsr rank,cpf score,cpf rank,ifr score,ifr rank,isr score,isr rank,irn score,irn rank,ger score,ger rank,score scaled
+﻿rank,institution,location code,location,ar score,ar rank,er score,er rank,fsr score,fsr rank,cpf score,cpf rank,ifr score,ifr rank,isr score,isr rank,irn score,irn rank,ger score,ger rank,score scaled
 1,Massachusetts Institute of Technology (MIT) ,US,United States,100,5,100,4,100,14,100,5,100,54,90,109,96.1,58,100,3,100
 2,University of Cambridge,UK,United Kingdom,100,2,100,2,100,11,92.3,55,100,60,96.3,70,99.5,6,100,9,98.8
 3,Stanford University,US,United States,100,4,100,5,100,6,99.9,9,99.8,74,60.3,235,96.3,55,100,2,98.5

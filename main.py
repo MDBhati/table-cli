@@ -6,7 +6,8 @@
 # | Bob   | 19  |
 # +-------+-----+
 import csv 
-
+import re 
+regex = re.compile('[^a-z#A-Z ]+')
 
 class Table:
 
@@ -16,7 +17,8 @@ class Table:
         with open(filepath,'r',encoding="utf8") as file:
             csvreader = csv.reader(file)
             self.column_title = next(csvreader)
-            self.column_title.insert(0,'# ')
+            self.column_title.insert(0,'#')
+            self.column_title = list(map(lambda x: regex.sub('', x.lower().strip()),self.column_title))
 
             for row in csvreader:
                 self.rows.append(row)
@@ -40,7 +42,7 @@ class Table:
         elif end < start :
             raise IndexError(f"end should be greater than or equals to start but given start:{type(start)}, end:{type(end)}")
 
-        index = self.column_title.index(config['search']['column_name'])-1
+        index = self.column_title.index(regex.sub('', config['search']['column_name'].lower().strip()))-1
         value = (config['search']['term']).strip().lower()
         rows = list(filter(lambda x: value in x[index].strip().lower(), self.rows[start:end]))
         rows = rows[:limit]
@@ -50,7 +52,7 @@ class Table:
         for title in self.column_title:
             table += ('-')*(len(title)+2)+"+"
 
-        table += ('\n|  '+' | '.join(map(lambda x:x.lower().strip(),self.column_title)) +' |\n+')
+        table += ('\n| '+' | '.join(self.column_title) +' |\n+')
 
         for title in self.column_title:
             table += ('=')*(len(title)+2)+"+"
@@ -58,13 +60,13 @@ class Table:
         row_number = 0
         for row in rows:
             row_number += 1
-            table += '\n| '+ str(row_number)+'  |'
+            table += '\n|'+"{:<3}".format(str(row_number))+'|'
             column_index = 1
 
             for data in row :
                 title_length = len(self.column_title[column_index])+1
-                data_length = len(data)
-                extra_length = title_length - data_length
+                data_length = len(data) 
+                extra_length = title_length - data_length 
                 table += f" {data[:title_length]}{extra_length*' '}|"
                 column_index += 1
             
@@ -77,8 +79,8 @@ class Table:
 
 config = {
     "start":50,
-    "end":500,
-    "limit":10,
+    "end":1400,
+    "limit":600,
     "search": {
         "column_name":'location',
         "term":'United States'

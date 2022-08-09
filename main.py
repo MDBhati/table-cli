@@ -16,15 +16,15 @@ class Table:
         with open(filepath,'r',encoding="utf8") as file:
             csvreader = csv.reader(file)
             self.column_title = next(csvreader)
+            self.column_title.insert(0,'# ')
 
             for row in csvreader:
-                self.rows.append(row)            
-
+                self.rows.append(row)
+                
     def list_table(self, config):
         start = config['start']
         end = config['end']
         limit = config['limit']
-
 
         if int(start) == -1:
             start = len(self.rows) - 1
@@ -40,10 +40,8 @@ class Table:
         elif end < start :
             raise IndexError(f"end should be greater than or equals to start but given start:{type(start)}, end:{type(end)}")
 
-
-        index = self.column_title.index(config['search']['column_name'])
+        index = self.column_title.index(config['search']['column_name'])-1
         value = (config['search']['term']).strip().lower()
-
         rows = list(filter(lambda x: value in x[index].strip().lower(), self.rows[start:end]))
         rows = rows[:limit]
 
@@ -52,14 +50,16 @@ class Table:
         for title in self.column_title:
             table += ('-')*(len(title)+2)+"+"
 
-        table += ('\n|  '+' | '.join(map(lambda x:x.lower(),self.column_title)) +' |\n+')
+        table += ('\n|  '+' | '.join(map(lambda x:x.lower().strip(),self.column_title)) +' |\n+')
 
         for title in self.column_title:
             table += ('=')*(len(title)+2)+"+"
 
+        row_number = 0
         for row in rows:
-            table += '\n|'
-            column_index = 0
+            row_number += 1
+            table += '\n| '+ str(row_number)+'  |'
+            column_index = 1
 
             for data in row :
                 title_length = len(self.column_title[column_index])+1
